@@ -1,99 +1,144 @@
-# Inventory-management-system
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct{
+
+typedef struct {
     int id;
     char name[50];
     int quantity;
     float price;
-
 } Item;
 
-void addItem(Item item[], int*count){
-        printf("Enter item id : ");
-        scanf("%d", &item[*count].id);
-        printf("Enter item name : ");
-        scanf(" %[^\n]", &item[*count].name);
-        printf("Enter item quantity : ");
-        scanf("%d", &item[*count].quantity);
-        printf(" Enter item price : ");
-        scanf("%f", &item[*count].price);
-        (*count)++;
-        printf("Items added successfully !\n ");
 
-
+void addItem(Item items[], int *count) {
+    printf("Enter Item ID: ");
+    scanf("%d", &items[*count].id);
+    printf("Enter Item Name: ");
+    scanf(" %[^\n]", items[*count].name); 
+    printf("Enter Quantity: ");
+    scanf("%d", &items[*count].quantity);
+    printf("Enter Price: ");
+    scanf("%f", &items[*count].price);
+    (*count)++;
+    printf("Item added successfully!\n");
 }
 
-void displayItem(Item item[], int count){
-    printf("\n Inventory items :\n");
-    printf("id\tname\t\tquantity\tprice");
-    printf(" \n");
-    for (int i = 0; i<count; i++){
-        printf("%d\t%-15s\t%d\t\t%.2f\n", item[i].id,item[i].name,item[i].quantity,item[i].price);
+void displayItems(Item items[], int count) {
+    printf("\nInventory Items:\n");
+    printf("ID\tName\t\tQuantity\tPrice\n");
+    printf("\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d\t%-15s\t%d\t\t%.2f\n", items[i].id, items[i].name, items[i].quantity, items[i].price);
     }
 }
-void searchItem(Item item[], int count){
+
+void searchItem(Item items[], int count) {
     int id;
-    printf("Enter item id : ");
+    printf("Enter Item ID to search: ");
     scanf("%d", &id);
-    for(int i = 0; i < count; i++){
-        if (item[i].id == id){
-            printf("Item with %d id has been found\n");
-            printf("Id : %d\n , Name : %s\n, Quantity : %d\n, Price : %.2f\n ",
-            item[i].id,item[i].name,item[i].quantity,item[i].price);
+    for (int i = 0; i < count; i++) {
+        if (items[i].id == id) {
+            printf("\nItem Found:\n");
+            printf("ID: %d\nName: %s\nQuantity: %d\nPrice: %.2f\n", items[i].id, items[i].name, items[i].quantity, items[i].price);
             return;
-    
-  }
-    }
-    printf("Item with %d id not found\n",id);
-}
-
-void deleteItem(Item item[],int *count){
-
-  int id, found =0;
-    printf("Enter the id of the item = ");
-    scanf("%d", &id);
-    for(int i =0; i<*count ; i++){
-        if(item[i].id == id){
-            found =  1;
-            for(int j=i; j <*count-1;j++){
-                item[j]= item[j+1];
-                (*count)--;
-                printf("Item deleted \n");
-                break;
-            }
-
-  }
-        if(!found){
-            printf("Item with %d Id not found\n");
         }
     }
+    printf("Item with ID %d not found.\n", id);
 }
-int main(){
-    Item item [100];
-    int count = 0, choice;
-    while(1){
-        printf("\n Inventory Management System\n");
-        printf("Add Item\n");
-        printf("Display Item\n");
-        printf("Search Item\n");
-        printf("Delete Item\n");
-        printf("Exit\n");
-        printf("Enter your choice = ");
-        scanf("%d",&choice);
-        switch (choice)
-        {
-        case 1:addItem(item, &count);break;
-        case 2 : displayItem(item, count);break;
-        case 3 : searchItem(item, count);break;
-        case 4 : deleteItem (item, &count);break;
-        case 5 : printf("Exiting...\n");
-        exit(0);
-       default:printf("Invalid \n");
-            
-}
+
+void deleteItem(Item items[], int *count) {
+    int id, found = 0;
+    printf("Enter Item ID to delete: ");
+    scanf("%d", &id);
+    for (int i = 0; i < *count; i++) {
+        if (items[i].id == id) {
+            found = 1;
+            for (int j = i; j < *count - 1; j++) {
+                items[j] = items[j + 1];
+            }
+            (*count)--;
+            printf("Item deleted successfully!\n");
+            break;
+        }
     }
-return 0;
+    if (!found) {
+        printf("Item with ID %d not found.\n", id);
+    }
+}
+
+void updateItem(Item items[], int count) {
+    int id, found = 0;
+    printf("Enter Item ID to update: ");
+    scanf("%d", &id);
+    for (int i = 0; i < count; i++) {
+        if (items[i].id == id) {
+            found = 1;
+            printf("Enter new Item Name: ");
+            scanf(" %[^\n]", items[i].name);
+            printf("Enter new Quantity: ");
+            scanf("%d", &items[i].quantity);
+            printf("Enter new Price: ");
+            scanf("%f", &items[i].price);
+            printf("Item updated successfully!\n");
+            break;
+        }
+    }
+    if (!found) {
+        printf("Item with ID %d not found.\n", id);
+    }
+}
+
+void viewTotalValue(Item items[], int count) {
+    float totalValue = 0;
+    for (int i = 0; i < count; i++) {
+        totalValue += items[i].quantity * items[i].price;
+    }
+    printf("Total Value of Inventory: %.2f\n", totalValue);
+}
+
+int main() {
+    Item items[100];
+    int count = 0, choice;
+
+while (1) {
+        printf("\nInventory Management System\n");
+        printf("1. Add Item\n");
+        printf("2. Display Items\n");
+        printf("3. Search Item\n");
+        printf("4. Delete Item\n");
+        printf("5. Update Item\n");
+        printf("6. View Total Value\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+  switch (choice) {
+            case 1:
+                addItem(items, &count);
+                break;
+            case 2:
+                displayItems(items, count);
+                break;
+            case 3:
+                searchItem(items, count);
+                break;
+            case 4:
+                deleteItem(items, &count);
+                break;
+            case 5:
+                updateItem(items, count);
+                break;
+            case 6:
+                viewTotalValue(items, count);
+                break;
+            case 7:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+ return 0;
 }
